@@ -48,7 +48,7 @@
 							<outputDirectory>${basedir}/.git/hooks</outputDirectory>
 							<resources>
 								<resource>
-									<directory>git-hooks</directory>
+									<directory>hooks</directory>
 								</resource>
 							</resources>
 						</configuration>
