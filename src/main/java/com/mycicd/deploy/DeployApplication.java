@@ -33,7 +33,7 @@ public class DeployApplication {
                 Repository repository = service.getRepository("Grigor99", "scriptCiCD"); // replace with the owner and name of your GitHub repository
 
                 Date pushedAt = repository.getPushedAt();
-                if ((System.currentTimeMillis()- pushedAt.getTime())<1500) {
+                if ((System.currentTimeMillis() - pushedAt.getTime()) / 60000D < 1.5) {
                     Runtime.getRuntime().exec("/Users/gmartirosyan/Downloads/deploy/script.sh");
 
                 }
