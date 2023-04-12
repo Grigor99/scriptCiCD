@@ -6,6 +6,7 @@ import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.RepositoryService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+@EnableScheduling
 @SpringBootApplication
 public class DeployApplication {
 
@@ -21,7 +23,7 @@ public class DeployApplication {
     @Service
     public class GithubPushChecker {
 
-        @Scheduled(cron = "*/1 * * * *")
+        @Scheduled(cron = "* */1 * * * *")
         public void checkForNewPushes() {
             GitHubClient client = new GitHubClient();
             client.setCredentials("Grigor99", "MyGithub99Ame12345!!"); // replace with your GitHub username and password
@@ -31,7 +33,7 @@ public class DeployApplication {
                 Repository repository = service.getRepository("Grigor99", "scriptCiCD"); // replace with the owner and name of your GitHub repository
 
                 Date pushedAt = repository.getPushedAt();
-                if (true) {
+                if ((System.currentTimeMillis()- pushedAt.getTime())<1500) {
                     Runtime.getRuntime().exec("/Users/gmartirosyan/Downloads/deploy/script.sh");
 
                 }
