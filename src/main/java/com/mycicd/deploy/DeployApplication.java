@@ -21,7 +21,7 @@ public class DeployApplication {
     @Service
     public class GithubPushChecker {
 
-        @Scheduled(cron = "0 * * * * ?")
+        @Scheduled(cron = "*/1 * * * *")
         public void checkForNewPushes() {
             GitHubClient client = new GitHubClient();
             client.setCredentials("Grigor99", "MyGithub99Ame12345!!"); // replace with your GitHub username and password
