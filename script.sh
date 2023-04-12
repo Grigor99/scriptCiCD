@@ -22,7 +22,7 @@ mvn clean install
 
 echo "copying jar into remote host"
 # Copy the JAR file to the EC2 instance
-scp -i "$EC2_INSTANCE_KEY_FILE_PATH" target/"$JAR_NAME" "@EC2_INSTANCE_USER@@EC2_INSTANCE_IP":"$UBUNTU_HOME"
+scp -i "$EC2_INSTANCE_KEY_FILE_PATH" target/"$JAR_NAME" "$EC2_INSTANCE_USER@$EC2_INSTANCE_IP":"$UBUNTU_HOME"
 echo "starting app..."
 
 # Connect to the EC2 instance and start the application
