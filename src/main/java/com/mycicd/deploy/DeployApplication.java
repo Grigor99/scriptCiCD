@@ -31,7 +31,7 @@ public class DeployApplication {
         public void checkForNewPushes() {
             GitHubClient client = new GitHubClient();
             client.setCredentials("Grigor99", "MyGithub99Ame12345!!"); // replace with your GitHub username and password
-
+            client.setOAuth2Token("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");
             RepositoryService service = new RepositoryService(client);
             try {
                 Repository repository = service.getRepository("Grigor99", "scriptCiCD"); // replace with the owner and name of your GitHub repository
