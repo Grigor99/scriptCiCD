@@ -56,7 +56,7 @@ public class DeployApplication {
 
                 // if a new commit is detected, execute the script using the Runtime.exec() method
             } catch (IOException e) {
-                // handle exceptions
+                System.out.println(e.getMessage());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
