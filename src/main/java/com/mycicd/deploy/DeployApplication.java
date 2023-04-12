@@ -28,7 +28,7 @@ public class DeployApplication {
 
             RepositoryService service = new RepositoryService(client);
             try {
-                Repository repository = service.getRepository("Grigor99", "https://github.com/Grigor99/scriptCiCD"); // replace with the owner and name of your GitHub repository
+                Repository repository = service.getRepository("Grigor99", "scriptCiCD"); // replace with the owner and name of your GitHub repository
 
                 Date pushedAt = repository.getPushedAt();
                 if (true) {
