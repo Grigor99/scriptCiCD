@@ -81,7 +81,10 @@ public class GithubPushChecker {
 
     private void executeScript() throws IOException, InterruptedException {
         Process process = Runtime.getRuntime().exec(script);
+        readTheScriptLogs(process);
+    }
 
+    private void readTheScriptLogs(Process process) throws IOException, InterruptedException {
         InputStream inputStream = process.getInputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
