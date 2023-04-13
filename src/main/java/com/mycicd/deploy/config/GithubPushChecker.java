@@ -25,10 +25,8 @@ public class GithubPushChecker {
     private GitHubClient createGitHubClient() {
         String user = "Grigor99";
         String pass = "MyGithub99Ame12345!!";
-        String token = "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";
         GitHubClient client = new GitHubClient();
         client.setCredentials(user, pass);
-        client.setOAuth2Token(token);
         return client;
     }
 
