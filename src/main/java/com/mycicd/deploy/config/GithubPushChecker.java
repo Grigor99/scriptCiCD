@@ -10,7 +10,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class GithubPushChecker {
@@ -40,59 +43,39 @@ public class GithubPushChecker {
             String owner = "Grigor99";
             String repo = "scriptCiCD";
             Repository repository = service.getRepository(owner, repo);
-            Date pushedAt = getPushedAt(repository);
-            long diff = getDiff(pushedAt);
-            long diffSeconds = getDiffInSec(diff);
-            long diffMinutes = getDiffInMin(diff);
-            long diffHours = getDiffInHours(diff);
+            Instant pushedAt = repository.getPushedAt().toInstant();
+            Duration diff = Duration.between(pushedAt, Instant.now());
+            long diffSeconds = diff.getSeconds();
+            long diffMinutes = TimeUnit.SECONDS.toMinutes(diffSeconds);
+            long diffHours = TimeUnit.SECONDS.toHours(diffSeconds);
             if (isExecutable(diffHours, diffMinutes, diffSeconds)) {
                 executeScript();
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | InterruptedException e) {
+            printExceptionMessage(e);
+        } catch (Exception e) {
+            printExceptionMessage(e);
         }
     }
 
-    private Date getPushedAt(Repository repository) {
-        return repository.getPushedAt();
-    }
-
-    private long getDiff(Date pushedAt) {
-        Date now = new Date();
-        long diff = now.getTime() - pushedAt.getTime();
-        return diff;
-    }
-
-    private long getDiffInSec(long diff) {
-        return diff / 1000 % 60;
-    }
-
-    private long getDiffInMin(long diff) {
-        return diff / (60 * 1000) % 60;
-    }
-
-    private long getDiffInHours(long diff) {
-        return diff / (60 * 60 * 1000);
+    private void printExceptionMessage(Exception e) {
+        System.out.println(e.getMessage());
     }
 
     private void executeScript() throws IOException, InterruptedException {
         Process process = Runtime.getRuntime().exec(script);
         readTheScriptLogs(process);
+        int exitCode = process.waitFor();
+        printExitCode(exitCode);
     }
 
-    private void readTheScriptLogs(Process process) throws IOException, InterruptedException {
-        InputStream inputStream = process.getInputStream();
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
+    private void readTheScriptLogs(Process process) throws IOException {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            bufferedReader.lines().forEach(System.out::println);
         }
+    }
 
-        int exitCode = process.waitFor();
+    private void printExitCode(int exitCode) {
         System.out.println("Script exited with code " + exitCode);
     }
 
